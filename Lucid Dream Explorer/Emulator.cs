@@ -25,30 +25,40 @@ namespace Lucid_Dream_Explorer
 
         public static string emulator;
         private static List<string> badVersionsMessaged = new List<string>();
+        private static IntPtr? emulatorPtr;
         public static IntPtr? baseAddr
         {
             get
             {
-                IntPtr? DEbaseAddress;
-                //Look for slow emulators first
-                //Try XEBRA
-                DEbaseAddress = DetectXEBRA();
-                emulator = XEBRA;
-                if (DEbaseAddress != null) return DEbaseAddress;
-                //Try ePSXe
-                DEbaseAddress = DetectEPSXe();
-                emulator = EPSXE;
-                if (DEbaseAddress != null) return DEbaseAddress;
-                //Try psxfin
-                DEbaseAddress = DetectPsxfin();
-                emulator = PSXFIN;
-                if (DEbaseAddress != null) return DEbaseAddress;
-                DEbaseAddress = DetectNocash();
-                emulator = NOCASH;
-                if (DEbaseAddress != null) return DEbaseAddress;
-                emulator = null;
-                return null;
+                if (emulatorPtr == null)
+                {
+                    emulatorPtr = HookEmulator();
+                }
+                return emulatorPtr;
             }
+        }
+
+        private static IntPtr? HookEmulator()
+        {
+            IntPtr? DEbaseAddress;
+            //Look for slow emulators first
+            //Try XEBRA
+            DEbaseAddress = DetectXEBRA();
+            emulator = XEBRA;
+            if (DEbaseAddress != null) return DEbaseAddress;
+            //Try ePSXe
+            DEbaseAddress = DetectEPSXe();
+            emulator = EPSXE;
+            if (DEbaseAddress != null) return DEbaseAddress;
+            //Try psxfin
+            DEbaseAddress = DetectPsxfin();
+            emulator = PSXFIN;
+            if (DEbaseAddress != null) return DEbaseAddress;
+            DEbaseAddress = DetectNocash();
+            emulator = NOCASH;
+            if (DEbaseAddress != null) return DEbaseAddress;
+            emulator = null;
+            return null;
         }
 
         //Returns main memory start
