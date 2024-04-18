@@ -15,11 +15,13 @@ namespace Lucid_Dream_Explorer
         public static readonly string EPSXE = @"pcsxr";
         public static readonly string PSXFIN = @"psxfin";
         public static readonly string XEBRA = @"XEBRA";
+        public static readonly string NOCASH = @"NO$PSX";
 
         //About window text strings
         public static readonly string PSXFIN_VERSION_CHECK = "pSX v1.13\0";
         public static readonly string EPSXE_VERSION_CHECK = @"Playstation Emulator based on PCSX-df";
         public static readonly string XEBRA_VERSION_CHECK = @""; //TODO
+        public static readonly string NOCASH_VERSION_CHECK = "2.2 ";
 
         public static string emulator;
         private static List<string> badVersionsMessaged = new List<string>();
@@ -40,6 +42,9 @@ namespace Lucid_Dream_Explorer
                 //Try psxfin
                 DEbaseAddress = DetectPsxfin();
                 emulator = PSXFIN;
+                if (DEbaseAddress != null) return DEbaseAddress;
+                DEbaseAddress = DetectNocash();
+                emulator = NOCASH;
                 if (DEbaseAddress != null) return DEbaseAddress;
                 emulator = null;
                 return null;
@@ -84,12 +89,45 @@ namespace Lucid_Dream_Explorer
                 ? (IntPtr?)BitConverter.ToInt32(readBuf, 0) : null;
         }
 
+        private static IntPtr? DetectNocash()
+        {
+            var mioRelative = new MemoryIO(NOCASH, true); //Program start = 0
+            var mioAbsolute = new MemoryIO(NOCASH, false); //The pointer baseAddrPointer points to
+			// is NOT program relative, this is the easiest solution I could come with.
+            if (!mioRelative.processOK()) return null;
+
+            byte[] readBuf = new byte[4];
+            var baseAddrPointer = new IntPtr(Offset.nocashMemstart); //NO$PSX.EXE+96208, double ptr
+            mioRelative.MemoryRead(baseAddrPointer, readBuf);
+            var secondAddrPointer = new IntPtr(BitConverter.ToInt32(readBuf,0));
+            mioAbsolute.MemoryRead(secondAddrPointer, readBuf);
+
+            //NO$PSX version number is manually slapped thogether from machine code, fun.
+            byte[] versionArray = System.Text.Encoding.Unicode.GetBytes("X.Xx");
+            byte[] replaceBuf = new byte[1];
+            mioRelative.MemoryRead((IntPtr)Offset.nocashVersion, replaceBuf);
+            versionArray[0] = replaceBuf[0];
+            mioRelative.MemoryRead((IntPtr)Offset.nocashVersion + 10, replaceBuf);
+            versionArray[4] = replaceBuf[0];
+            mioRelative.MemoryRead((IntPtr)Offset.nocashVersion + 20, replaceBuf);
+            versionArray[6] = replaceBuf[0];
+
+            return versionOk(NOCASH_VERSION_CHECK, versionArray)
+                ? (IntPtr?)BitConverter.ToInt32(readBuf, 0) : null;
+        }
+
         //Detect if supported version
         private static bool versionOk(string checkVersion, MemoryIO mioRelative, IntPtr versionPtr)
         {
             byte[] expected = System.Text.Encoding.Unicode.GetBytes(checkVersion);
             var versionBuf = new Byte[expected.Length];
             mioRelative.MemoryRead(versionPtr, versionBuf);
+            return versionOk(checkVersion, versionBuf);
+        }
+
+        private static bool versionOk(string checkVersion, byte[] versionBuf)
+        {
+            byte[] expected = System.Text.Encoding.Unicode.GetBytes(checkVersion);
             if (memcmp(expected, versionBuf, new UIntPtr((uint)expected.Length)) == 0)
                 return true; //Identical
 

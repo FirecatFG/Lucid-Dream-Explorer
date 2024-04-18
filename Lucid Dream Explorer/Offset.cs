@@ -37,5 +37,9 @@ namespace Lucid_Dream_Explorer
 
         public static readonly int xebraMemstart = 0x54920;
         public static readonly int xebraVersion = 0x0; //TODO
+
+        public static readonly int nocashMemstart = 0x96208; //NO$PSX.EXE+96208, double ptr
+		public static readonly int nocashVersion = 0x11c5;
+		//public static readonly int nocashEdition = 0xC3DA5; //Garbled string (-85) don't worry about it.
     }
 }
