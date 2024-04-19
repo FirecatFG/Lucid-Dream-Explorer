@@ -153,13 +153,11 @@ namespace Lucid_Dream_Explorer
             return value;
         }
 
-        private void RedrawMapCrosshair(int x, int y, bool blink, int chunkX, int chunkY)
+        private void DrawDreamChart(int x, int y, bool blink, int chunkX, int chunkY)
         {
             Pen ChunkPen = new Pen(Brushes.DodgerBlue, 3.0f);
             int center = pictureBox1.Width / 2; //Width == height here
             center -= 8; //Square center
-            //x -= -310000; y -= 310000; //Map offset
-            //x /= 2500; y /= -2500; //Map scale
             //Console.Out.WriteLine("Map: (" + x + ", "+ y + ")");
 
             Bitmap baseImg = Lucid_Dream_Explorer.Properties.Resources.DreamChart;
@@ -173,13 +171,11 @@ namespace Lucid_Dream_Explorer
                 g.FillRectangle(System.Drawing.Brushes.DarkRed, center + x * 16, center - y * 16, 16, 16);
             }*/
             g.DrawRectangle(ChunkPen, center + chunkX * 16 + 1, center - chunkY * 16 + 1, 14, 14);
-            //g.FillRectangle(System.Drawing.Brushes.Red, x, y, 4, 4);
+
             pictureBox1.Image = baseImg;
+            ChunkPen.Dispose();
             g.Dispose();
 
-            //TODO: If not the natural world, do we need to redraw?
-            //The crosshair should stay on the specific coordinate
-            // while we stay at the same map
         }
 
         //TODO: Use sender or e to get nud and offset
@@ -324,7 +320,7 @@ namespace Lucid_Dream_Explorer
             textBox22.Text = finalRating_x.ToString();
             textBox23.Text = finalRating_y.ToString();
 
-            RedrawMapCrosshair(finalRating_x, finalRating_y, blinkMarker, lastChunk_x, lastChunk_y);
+            DrawDreamChart(finalRating_x, finalRating_y, blinkMarker, lastChunk_x, lastChunk_y);
             blinkMarker = !blinkMarker;
 
             if (UpdateReadValue(Offset.X).HasValue)
