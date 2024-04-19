@@ -17,8 +17,8 @@ namespace Lucid_Dream_Explorer
         public static int? chart_return_x { get { return getInt16(Offset.chart_return_x); } }
         public static int? chart_return_y { get { return getInt16(Offset.chart_return_y); } }
 
-        public static int? event_x { get { return getInt32(Offset.event_x); } }
-        public static int? event_y { get { return getInt32(Offset.event_y); } }
+        public static int? event_x { get { return getInt32(Offset.total_event_x); } }
+        public static int? event_y { get { return getInt32(Offset.total_event_y); } }
         public static int? events { get { return getInt32(Offset.events); } }
 
         public static int? gray_enabled

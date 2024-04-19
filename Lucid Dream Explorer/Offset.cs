@@ -22,9 +22,17 @@ namespace Lucid_Dream_Explorer
 
         public static readonly int day = 0x916B0;
 
-        public static readonly int event_x = 0x91678;
-        public static readonly int event_y = 0x9167c;
+        public static readonly int last_event_x = 0x91674;
+        public static readonly int last_event_y = 0x91675;
+        public static readonly int total_event_x = 0x91678;
+        public static readonly int total_event_y = 0x9167c;
         public static readonly int events = 0x91680;
+
+        public static readonly int last_obj_event_x = 0x91684;
+        public static readonly int last_obj_event_y = 0x91685;
+        public static readonly int total_obj_event_x = 0x91688;
+        public static readonly int total_obj_event_y = 0x9168c;
+        public static readonly int obj_events = 0x91690;
 
         public static readonly uint gray_ptr = 0x88D2C;
         public static readonly int gray_flag_enabled = 0x8C;

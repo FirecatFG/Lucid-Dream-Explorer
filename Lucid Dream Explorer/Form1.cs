@@ -268,16 +268,16 @@ namespace Lucid_Dream_Explorer
             textBox4.Text = UpdateReadValue(0x8AC70).Value.ToString();
 
             //Events
-            int amtChunks = UpdateReadValue(0x91680).Value;
-            textBox8.Text = amtChunks.ToString();
-            int lastChunk_x = UpdateReadByte(0x91674).Value;
-            textBox9.Text = lastChunk_x.ToString();
-            int lastChunk_y = UpdateReadByte(0x91675).Value;
-            textBox12.Text = lastChunk_y.ToString();
-            int sumChunks_x = UpdateReadValue(0x91678).Value;
-            textBox10.Text = sumChunks_x.ToString();
-            int sumChunks_y = UpdateReadValue(0x9167c).Value;
-            textBox11.Text = sumChunks_y.ToString();
+            int amtChunks = UpdateReadValue(Offset.events).Value;
+            if (!textBox8.Focused) textBox8.Text = amtChunks.ToString();
+            int lastChunk_x = UpdateReadByte(Offset.last_event_x).Value;
+            if (!textBox9.Focused) textBox9.Text = lastChunk_x.ToString();
+            int lastChunk_y = UpdateReadByte(Offset.last_event_y).Value;
+            if (!textBox12.Focused) textBox12.Text = lastChunk_y.ToString();
+            int sumChunks_x = UpdateReadValue(Offset.total_event_x).Value;
+            if (!textBox10.Focused) textBox10.Text = sumChunks_x.ToString();
+            int sumChunks_y = UpdateReadValue(Offset.total_event_y).Value;
+            if (!textBox11.Focused) textBox11.Text = sumChunks_y.ToString();
             int avgChunks_x = 0;
             int avgChunks_y = 0;
 
@@ -289,16 +289,16 @@ namespace Lucid_Dream_Explorer
                 textBox14.Text = avgChunks_y.ToString();
             }
 
-            int amtTriggers = UpdateReadValue(0x91690).Value;
-            textBox21.Text = amtTriggers.ToString();
-            int lastTrigger_x = UpdateReadByte(0x91684).Value;
-            textBox20.Text = lastTrigger_x.ToString();
-            int lastTrigger_y = UpdateReadByte(0x91685).Value;
-            textBox17.Text = lastTrigger_y.ToString();
-            int sumTriggers_x = UpdateReadValue(0x91688).Value;
-            textBox19.Text = sumTriggers_x.ToString();
-            int sumTriggers_y = UpdateReadValue(0x9168c).Value;
-            textBox18.Text = sumTriggers_y.ToString();
+            int amtTriggers = UpdateReadValue(Offset.obj_events).Value;
+            if (!textBox21.Focused) textBox21.Text = amtTriggers.ToString();
+            int lastTrigger_x = UpdateReadByte(Offset.last_obj_event_x).Value;
+            if (!textBox20.Focused) textBox20.Text = lastTrigger_x.ToString();
+            int lastTrigger_y = UpdateReadByte(Offset.last_obj_event_y).Value;
+            if (!textBox17.Focused) textBox17.Text = lastTrigger_y.ToString();
+            int sumTriggers_x = UpdateReadValue(Offset.total_obj_event_x).Value;
+            if (!textBox19.Focused) textBox19.Text = sumTriggers_x.ToString();
+            int sumTriggers_y = UpdateReadValue(Offset.total_obj_event_y).Value;
+            if (!textBox18.Focused) textBox18.Text = sumTriggers_y.ToString();
 
             int finalRating_x, finalRating_y;
             if (amtTriggers > 0)
@@ -430,5 +430,86 @@ namespace Lucid_Dream_Explorer
                 ButtonSetByte((TextBox)sender, 0x916c1 + previousDay * 2);
             }
         }
+
+        private void textBox10_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSet((TextBox)sender, Offset.total_event_x);
+            }
+        }
+
+        private void textBox11_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSet((TextBox)sender, Offset.total_event_y);
+            }
+        }
+
+        private void textBox8_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSet((TextBox)sender, Offset.events);
+            }
+        }
+
+        private void textBox9_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSetByte((TextBox)sender, Offset.last_event_x);
+            }
+        }
+
+        private void textBox12_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSetByte((TextBox)sender, Offset.last_event_y);
+            }
+        }
+
+        private void textBox19_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSet((TextBox)sender, Offset.total_obj_event_x);
+            }
+        }
+
+        private void textBox18_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSet((TextBox)sender, Offset.total_obj_event_y);
+            }
+        }
+
+        private void textBox21_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSet((TextBox)sender, Offset.obj_events);
+            }
+        }
+
+        private void textBox20_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSetByte((TextBox)sender, Offset.last_obj_event_x);
+            }
+        }
+
+        private void textBox17_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSetByte((TextBox)sender, Offset.last_obj_event_y);
+            }
+        }
+
     }
 }
