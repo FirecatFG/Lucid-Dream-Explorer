@@ -37,6 +37,16 @@ namespace Lucid_Dream_Explorer
         public static readonly uint gray_ptr = 0x88D2C;
         public static readonly int gray_flag_enabled = 0x8C;
 
+        /*For future reference: 0x91fc8 contains the ram value for the currently selected option in the main menu
+            0: START
+            1: FLASHBACK (Even if it's not unlocked)
+            2: SAVE
+            3: LOAD
+            4: GRAPH
+            5: SHAKE
+        Search for these values in Cheat Engine then substract 0x91fc8 to get the current start of memory.
+        Search for THAT address until you get something with a "'.exe' + something" address.*/
+
         public static readonly int ePSXeMemstart = 0x14D2020;
         public static readonly int ePSXeVersion = 0x1551B5C;
 
@@ -46,8 +56,9 @@ namespace Lucid_Dream_Explorer
         public static readonly int xebraMemstart = 0x54920;
         public static readonly int xebraVersion = 0x0; //TODO
 
-        public static readonly int nocashMemstart = 0x96208; //NO$PSX.EXE+96208, double ptr
-		public static readonly int nocashVersion = 0x11c5;
-		//public static readonly int nocashEdition = 0xC3DA5; //Garbled string (-85) don't worry about it.
+        public static readonly int nocashMemstart = 0xC74C8;
+        public static readonly int nocashMemstartLite = 0x80E90;
+        public static readonly int nocashVersion = 0x11c5;
+        public static readonly int nocashEdition = 0xC3DA5; //Garbled string (-85) don't worry about it.
     }
 }

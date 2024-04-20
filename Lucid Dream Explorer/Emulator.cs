@@ -102,15 +102,29 @@ namespace Lucid_Dream_Explorer
         private static IntPtr? DetectNocash()
         {
             var mioRelative = new MemoryIO(NOCASH, true); //Program start = 0
-            var mioAbsolute = new MemoryIO(NOCASH, false); //The pointer baseAddrPointer points to
-			// is NOT program relative, this is the easiest solution I could come with.
             if (!mioRelative.processOK()) return null;
 
             byte[] readBuf = new byte[4];
-            var baseAddrPointer = new IntPtr(Offset.nocashMemstart); //NO$PSX.EXE+96208, double ptr
+            IntPtr secretText = new IntPtr(Offset.nocashEdition);
+            mioRelative.MemoryRead(secretText, readBuf);
+
+            IntPtr baseAddrPointer;
+            uint crimes = BitConverter.ToUInt32(readBuf, 0);
+            if (crimes == 0x171720f1) //"lluF" in bad ACSII
+            {
+                baseAddrPointer = new IntPtr(Offset.nocashMemstart); //Load pointer for debug version
+            }
+            else
+            {
+                baseAddrPointer = new IntPtr(Offset.nocashMemstartLite); //Load pointer for gaming version
+            }
             mioRelative.MemoryRead(baseAddrPointer, readBuf);
-            var secondAddrPointer = new IntPtr(BitConverter.ToInt32(readBuf,0));
-            mioAbsolute.MemoryRead(secondAddrPointer, readBuf);
+            int baseAddr = BitConverter.ToInt32(readBuf,0);
+
+            if (baseAddr == 0)
+            {
+                return null; //Memory table is "Not Ready"
+            }
 
             //NO$PSX version number is manually slapped thogether from machine code, fun.
             byte[] versionArray = System.Text.Encoding.Unicode.GetBytes("X.Xx");
@@ -123,7 +137,7 @@ namespace Lucid_Dream_Explorer
             versionArray[6] = replaceBuf[0];
 
             return versionOk(NOCASH_VERSION_CHECK, versionArray)
-                ? (IntPtr?)BitConverter.ToInt32(readBuf, 0) : null;
+                ? (IntPtr?)baseAddr : null;
         }
 
         //Detect if supported version
