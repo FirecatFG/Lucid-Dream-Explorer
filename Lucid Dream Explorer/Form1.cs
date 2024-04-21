@@ -15,11 +15,6 @@ namespace Lucid_Dream_Explorer
         public Form1()
         {
             InitializeComponent();
-            foreach (string sound in sounds)
-            {
-                comboBox1.Items.Add(sound);
-            }
-            comboBox1.SelectedIndex = 0;
 
             timer1.Start();
         }
