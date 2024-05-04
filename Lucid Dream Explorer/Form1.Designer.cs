@@ -479,7 +479,7 @@
             // textBox26
             // 
             this.textBox26.Enabled = false;
-            this.textBox26.Location = new System.Drawing.Point(69, 191);
+            this.textBox26.Location = new System.Drawing.Point(69, 194);
             this.textBox26.Name = "textBox26";
             this.textBox26.Size = new System.Drawing.Size(32, 20);
             this.textBox26.TabIndex = 49;
@@ -487,7 +487,7 @@
             // textBox27
             // 
             this.textBox27.Enabled = false;
-            this.textBox27.Location = new System.Drawing.Point(107, 191);
+            this.textBox27.Location = new System.Drawing.Point(107, 194);
             this.textBox27.Name = "textBox27";
             this.textBox27.Size = new System.Drawing.Size(32, 20);
             this.textBox27.TabIndex = 48;
