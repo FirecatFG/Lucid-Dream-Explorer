@@ -6,6 +6,8 @@ namespace Lucid_Dream_Explorer
 {
     public partial class Form1 : Form
     {
+        private static int[] special_days = { 2, 7, 14, 15, 21, 28, 35, 42, 43, 49, 56, 63, 70, 77, 81, 84, 91, 98, 105, 112, 119, 120, 126, 134, 141, 148, 155, 162, 169, 176, 183, 190, 197, 202, 204, 259, 267, 284, 308, 328, 358, 367 };
+        private int our_current_day = -1;
         private static string[] maps = { "Bright Moon Cottage", "Pit & Temple", "Kyoto", "The Natural World", "Happy Town", "Violence District", "Moonlight Tower", "Temple Dojo", "Flesh Tunnels", "Clockwork Machines", "Long Hallway", "Sun Faces Heave", "Black Space", "Monument Park" };
         private static string[] sounds = { "00 - [Jangling]", "01 - [Opera Singer?]", "02 - [Jiggling]", "03 - Grass, Sand, H.T. Footstep", "04 - Train", "05 - Astronaut, Trumpeters", "06 - H.T. Squeak Footstep, Pterodactyl, Kissing Lips", "07 - Flowing Water (Natural World)", "08 - Link", "09 - H.T. Wood Footstep", "10 - Deep Rumbling", "11 - V.D. Dock Footstep", "12 - Wooden Bridge Footstep", "13 - [Tengu?]", "14 - Drumming (Kyoto)", "15 - H.T. Wet Footstep", "16 - [Tengu?]", "17 - [Clockwork Machine?]", "18 - Snarl (Lions, Dojo Dog)", "19 - Wings Flapping (Pterodactyl)", "20 - [Unknown]", "21 - Fetus Noise, Rocket Ship", "22 - Breathing (Sleeper in BMC)", "23 - BMC Birds Tweeting", "24 - [Long Hallway End?]", "25 - Horses Galloping (Natural World)", "26 - [UFO?]", "27 - Kyoto Grass Footstep", "28 - Generic Footstep (Tunnels, V.D., BMC Tile, NW Rock)", "29 - Water Footstep (NW River, Flesh Tunnel Slosh)" };
 
@@ -210,6 +212,27 @@ namespace Lucid_Dream_Explorer
             }
         }
 
+        private string daysToNextSpecial(int currentDay)
+        {
+            foreach (int spday in special_days)
+            {
+                //go through the special day list until you find one that's equal or greater 
+                if(currentDay == spday)
+                {
+                    return "Special day";
+                }
+                else if (currentDay + 1 == spday)
+                {
+                    return "Special day Tomorrow!";
+                }
+                else if (currentDay + 1 < spday)
+                {
+                    return String.Format("Next special in {0} days", spday - currentDay);
+                }
+            }
+            return "invalid?";
+        }
+
         private void updateStuff()
         {
             
@@ -244,6 +267,11 @@ namespace Lucid_Dream_Explorer
             if (!textBox3.Focused)
             {
                 textBox3.Text = currentDay.ToString();
+                if (currentDay != our_current_day)
+                {
+                    label28.Text = daysToNextSpecial(currentDay + 1);
+                    our_current_day = currentDay;
+                }
             }
 
             //Previous Dream
