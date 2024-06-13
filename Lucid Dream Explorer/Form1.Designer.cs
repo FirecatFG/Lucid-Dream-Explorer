@@ -88,6 +88,10 @@
             this.label23 = new System.Windows.Forms.Label();
             this.textBox32 = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
+            this.textBox33 = new System.Windows.Forms.TextBox();
+            this.textBox34 = new System.Windows.Forms.TextBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -603,12 +607,52 @@
             this.label24.Text = "...";
             this.label24.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // textBox33
+            // 
+            this.textBox33.Enabled = false;
+            this.textBox33.Location = new System.Drawing.Point(76, 288);
+            this.textBox33.Name = "textBox33";
+            this.textBox33.Size = new System.Drawing.Size(32, 20);
+            this.textBox33.TabIndex = 62;
+            // 
+            // textBox34
+            // 
+            this.textBox34.Enabled = false;
+            this.textBox34.Location = new System.Drawing.Point(114, 288);
+            this.textBox34.Name = "textBox34";
+            this.textBox34.Size = new System.Drawing.Size(32, 20);
+            this.textBox34.TabIndex = 61;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Gabriola", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(12, 283);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(62, 29);
+            this.label25.TabIndex = 60;
+            this.label25.Text = "Cutscene:";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("Courier New", 12F);
+            this.label26.Location = new System.Drawing.Point(152, 288);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(38, 18);
+            this.label26.TabIndex = 63;
+            this.label26.Text = "...";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(633, 446);
+            this.Controls.Add(this.label26);
+            this.Controls.Add(this.textBox33);
+            this.Controls.Add(this.textBox34);
+            this.Controls.Add(this.label25);
             this.Controls.Add(this.label24);
             this.Controls.Add(this.textBox32);
             this.Controls.Add(this.label23);
@@ -738,6 +782,10 @@
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.TextBox textBox32;
         private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.TextBox textBox33;
+        private System.Windows.Forms.TextBox textBox34;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Label label26;
     }
 }
 

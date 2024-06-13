@@ -361,6 +361,35 @@ namespace Lucid_Dream_Explorer
                 textBox29.Text = UpdateReadByte((int)playerPointer + 0xbf).Value.ToString();
             }
 
+
+            //Cutscene Vars
+            int cutsceneBank = UpdateReadByte(0x91698).Value;
+            textBox33.Text = cutsceneBank.ToString();
+            int cutsceneEntry = UpdateReadByte(0x9169a).Value;
+            textBox34.Text = cutsceneEntry.ToString();
+
+            if (cutsceneEntry < 0)
+            {
+                label26.Text = "none";
+            }
+            else if (cutsceneBank == -1)
+            {
+                label26.Text = String.Format("EVENT{0:D}.STR",cutsceneEntry + 1);
+            }
+            else
+            {
+                char character = (char)(cutsceneEntry + 65);
+                string cutsceneFile = String.Format("SPDAY{0:D2}", cutsceneBank + 1) + character.ToString();
+                if (cutsceneEntry < 2) 
+                {
+                    label26.Text = cutsceneFile + ".STR";
+                }
+                else
+                {
+                    label26.Text = cutsceneFile + ".TIM";
+                }
+            }
+
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
@@ -395,7 +424,6 @@ namespace Lucid_Dream_Explorer
             }
         }
 
-            
         private void textBox7_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
