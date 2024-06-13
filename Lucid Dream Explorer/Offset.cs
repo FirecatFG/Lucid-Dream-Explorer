@@ -21,6 +21,10 @@ namespace Lucid_Dream_Explorer
         public static readonly int chart_return_y = 0x94016;
 
         public static readonly int day = 0x916B0;
+        public static readonly int total_flashback_score = 0x916B4;
+
+        public static readonly int dream_timer = 0x91554;
+        public static readonly int dream_time_limit = 0x91664;
 
         public static readonly int last_event_x = 0x91674;
         public static readonly int last_event_y = 0x91675;

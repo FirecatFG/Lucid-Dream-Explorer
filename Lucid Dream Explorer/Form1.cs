@@ -259,8 +259,24 @@ namespace Lucid_Dream_Explorer
                 textBox25.Text = previousDayMood_y.ToString();
             }
 
-            //Timer
+            //Flashback score
+            if (!textBox30.Focused)
+            {
+                int flashbackProgress = UpdateReadValue(Offset.total_flashback_score).Value;
+                textBox30.Text = flashbackProgress.ToString();
+                label24.Text = (flashbackProgress/100000).ToString()+"%";
+            }
+
+            //Timers
             textBox4.Text = UpdateReadValue(0x8AC70).Value.ToString();
+            if (!textBox31.Focused)
+            {
+                textBox31.Text = UpdateReadValue(Offset.dream_timer).Value.ToString();
+            }
+            if (!textBox32.Focused)
+            {
+                textBox32.Text = UpdateReadValue(Offset.dream_time_limit).Value.ToString();
+            }
 
             //Events
             int amtChunks = UpdateReadValue(Offset.events).Value;
@@ -341,6 +357,8 @@ namespace Lucid_Dream_Explorer
             {
                 textBox26.Text = UpdateReadByte((int)playerPointer + 0xbc).Value.ToString();
                 textBox27.Text = UpdateReadByte((int)playerPointer + 0xbd).Value.ToString();
+                textBox28.Text = UpdateReadByte((int)playerPointer + 0xbe).Value.ToString();
+                textBox29.Text = UpdateReadByte((int)playerPointer + 0xbf).Value.ToString();
             }
 
         }
@@ -377,11 +395,7 @@ namespace Lucid_Dream_Explorer
             }
         }
 
-        private void textBox6_KeyPress(object sender, KeyPressEventArgs e)
-        {
             
-        }
-
         private void textBox7_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -503,6 +517,30 @@ namespace Lucid_Dream_Explorer
             if (e.KeyCode == Keys.Enter)
             {
                 ButtonSetByte((TextBox)sender, Offset.last_obj_event_y);
+            }
+        }
+
+        private void textBox32_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSet((TextBox)sender, Offset.dream_time_limit);
+            }
+        }
+
+        private void textBox31_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSet((TextBox)sender, Offset.dream_timer);
+            }
+        }
+
+        private void textBox30_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSet((TextBox)sender, Offset.total_flashback_score);
             }
         }
 
