@@ -92,6 +92,8 @@
             this.textBox34 = new System.Windows.Forms.TextBox();
             this.label25 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
+            this.textBox35 = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -643,12 +645,32 @@
             this.label26.TabIndex = 63;
             this.label26.Text = "...";
             // 
+            // textBox35
+            // 
+            this.textBox35.Location = new System.Drawing.Point(208, 43);
+            this.textBox35.Name = "textBox35";
+            this.textBox35.Size = new System.Drawing.Size(84, 20);
+            this.textBox35.TabIndex = 65;
+            this.textBox35.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox35_KeyDown);
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("Gabriola", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label27.Location = new System.Drawing.Point(144, 37);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(64, 29);
+            this.label27.TabIndex = 64;
+            this.label27.Text = "Last RNG:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(633, 446);
+            this.Controls.Add(this.textBox35);
+            this.Controls.Add(this.label27);
             this.Controls.Add(this.label26);
             this.Controls.Add(this.textBox33);
             this.Controls.Add(this.textBox34);
@@ -786,6 +808,8 @@
         private System.Windows.Forms.TextBox textBox34;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.TextBox textBox35;
+        private System.Windows.Forms.Label label27;
     }
 }
 

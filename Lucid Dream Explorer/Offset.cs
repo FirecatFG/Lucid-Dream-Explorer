@@ -8,6 +8,8 @@ namespace Lucid_Dream_Explorer
 {
     abstract class Offset
     {
+        public static readonly int RNG = 0x8ac68;
+
         public static readonly int X = 0x91e74;
         public static readonly int Y = 0x91e7c;
         public static readonly int Z = 0x91e78;
@@ -37,6 +39,8 @@ namespace Lucid_Dream_Explorer
         public static readonly int total_obj_event_x = 0x91688;
         public static readonly int total_obj_event_y = 0x9168c;
         public static readonly int obj_events = 0x91690;
+
+        public static readonly int rating_charts = 0x916c0;
 
         public static readonly uint gray_ptr = 0x88D2C;
         public static readonly int gray_flag_enabled = 0x8C;

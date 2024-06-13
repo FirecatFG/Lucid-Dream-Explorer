@@ -233,6 +233,12 @@ namespace Lucid_Dream_Explorer
                 }
             }
 
+            //random
+            if (!textBox35.Focused)
+            {
+                textBox35.Text = UpdateReadValue(Offset.RNG).Value.ToString();
+            }
+
             //Day
             int currentDay = ReadVal(Offset.day).Value;
             if (!textBox3.Focused)
@@ -250,12 +256,12 @@ namespace Lucid_Dream_Explorer
             int previousDayMood_x, previousDayMood_y;
             if (!textBox24.Focused)
             {
-                previousDayMood_x = UpdateReadByte(0x916c0 + previousDay * 2).Value;
+                previousDayMood_x = UpdateReadByte(Offset.rating_charts + previousDay * 2).Value;
                 textBox24.Text = previousDayMood_x.ToString();
             }
             if (!textBox25.Focused)
             {
-                previousDayMood_y = UpdateReadByte(0x916c1 + previousDay * 2).Value;
+                previousDayMood_y = UpdateReadByte(Offset.rating_charts + 1 + previousDay * 2).Value;
                 textBox25.Text = previousDayMood_y.ToString();
             }
 
@@ -450,7 +456,7 @@ namespace Lucid_Dream_Explorer
                 {
                     previousDay = 365;
                 }
-                ButtonSetByte((TextBox)sender, 0x916c0 + previousDay * 2);
+                ButtonSetByte((TextBox)sender, Offset.rating_charts + previousDay * 2);
             }
         }
 
@@ -464,7 +470,7 @@ namespace Lucid_Dream_Explorer
                 {
                     previousDay = 365;
                 }
-                ButtonSetByte((TextBox)sender, 0x916c1 + previousDay * 2);
+                ButtonSetByte((TextBox)sender, Offset.rating_charts + 1 + previousDay * 2);
             }
         }
 
@@ -561,6 +567,14 @@ namespace Lucid_Dream_Explorer
             if (e.KeyCode == Keys.Enter)
             {
                 ButtonSet((TextBox)sender, Offset.dream_timer);
+            }
+        }
+
+        private void textBox35_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonSet((TextBox)sender, Offset.RNG);
             }
         }
 
