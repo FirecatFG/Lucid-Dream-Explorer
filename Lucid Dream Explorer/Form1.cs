@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Lucid_Dream_Explorer
@@ -183,9 +184,12 @@ namespace Lucid_Dream_Explorer
         private void DrawDreamChart(float x, float y, bool blink, EventRatingContainer areas, EventRatingContainer objs)
         {
             Pen ChunkPen = new Pen(Brushes.DodgerBlue, 3.0f);
+            Pen smallOutline = new Pen(Brushes.DodgerBlue, 1.0f);
+            Pen smallDashed = new Pen(Brushes.DodgerBlue, 2.0f);
+            smallDashed.DashStyle = DashStyle.Dot;
+            smallDashed.EndCap = LineCap.ArrowAnchor;
             int center = pictureBox1.Width / 2; //Width == height here
             center -= 8; //Square center
-            //Console.Out.WriteLine("Map: (" + x + ", "+ y + ")");
 
             Bitmap baseImg = Lucid_Dream_Explorer.Properties.Resources.DreamChart;
             Graphics g = Graphics.FromImage(baseImg);
@@ -199,8 +203,55 @@ namespace Lucid_Dream_Explorer
             }*/
             g.DrawRectangle(ChunkPen, center + areas.last_x * 16 + 1, center - areas.last_y * 16 + 1, 14, 14);
 
+            center += 8;
+
+            float rawX = center + areas.raw_avg_x * 16;
+            float rawY = center - areas.raw_avg_y * 16;
+            float lankedX = rawX + areas.last_x / 3 * 16;
+            float lankedY = rawY - areas.last_y / 3 * 16;
+
+            g.DrawLine(smallDashed, rawX, rawY, lankedX, lankedY);
+            if (areas.amount > 1)
+            {
+                g.DrawEllipse(smallOutline, rawX - 4, rawY - 4, 8, 8);
+            }
+            
+            if (objs.amount > 0)
+            {
+
+                rawX = center + objs.raw_avg_x * 16;
+                rawY = center - objs.raw_avg_y * 16;
+                lankedX = rawX + objs.last_x / 3 * 16;
+                lankedY = rawY - objs.last_y / 3 * 16;
+
+                smallDashed.Brush = Brushes.Green;
+                g.DrawLine(smallDashed, rawX, rawY, lankedX, lankedY);
+                smallOutline.Brush = Brushes.Green;
+                g.DrawEllipse(smallOutline, rawX - 4, rawY - 4, 8, 8);
+
+                int objX = center + objs.avg_x * 16;
+                int objY = center - objs.avg_y * 16;
+                int areaX = center + areas.avg_x * 16;
+                int areaY = center - areas.avg_y * 16;
+                float finalX = center + x * 16;
+                float finalY = center - y * 16;
+
+                smallDashed.Brush = Brushes.Black;
+                smallDashed.EndCap = LineCap.NoAnchor;
+                g.DrawLine(smallDashed, areaX, areaY, objX, objY);
+                smallOutline.Brush = Brushes.Black;
+                g.FillEllipse(Brushes.DodgerBlue, areaX - 4, areaY - 4, 8, 8);
+                g.DrawEllipse(smallOutline, areaX - 4, areaY - 4, 8, 8);
+                g.FillEllipse(Brushes.Green, objX - 4, objY - 4, 8, 8);
+                g.DrawEllipse(smallOutline, objX - 4, objY - 4, 8, 8);
+                g.FillEllipse(Brushes.Red, finalX - 4, finalY - 4, 8, 8);
+                g.DrawEllipse(smallOutline, finalX - 4, finalY - 4, 8, 8);
+            }
+
             pictureBox1.Image = baseImg;
             ChunkPen.Dispose();
+            smallOutline.Dispose();
+            smallDashed.Dispose();
             g.Dispose();
 
         }
