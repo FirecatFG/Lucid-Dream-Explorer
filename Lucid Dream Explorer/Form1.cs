@@ -6,6 +6,48 @@ namespace Lucid_Dream_Explorer
 {
     public partial class Form1 : Form
     {
+
+        private class EventRatingContainer
+        {
+            public int sum_x, sum_y, last_x, last_y, amount = 0;
+            public int avg_x, avg_y = 0;
+            public float raw_avg_x, raw_avg_y = 0;
+            private static float CalcRawAvg(int sum, int amt)
+            {
+                return ((float)sum) / amt;
+            }
+            private static int CalcFinalValue(int avg, int bonus)
+            {
+                int value = avg + bonus / 3;
+
+                if (value >= 10)
+                {
+                    value = -9;
+                }
+                else if (value < -9)
+                {
+                    value = 9;
+                }
+                return value;
+            }
+            public void UpdateAverages()
+            {
+                if (amount <= 0)
+                {
+                    avg_x = 0; avg_y = 0;
+                    raw_avg_x = 0; raw_avg_y = 0;
+                }
+                else
+                {
+                    raw_avg_x = CalcRawAvg(sum_x, amount);
+                    avg_x = CalcFinalValue((int)raw_avg_x, last_x);
+                    raw_avg_y = CalcRawAvg(sum_y, amount);
+                    avg_y = CalcFinalValue((int)raw_avg_y, last_y);
+                }
+            }
+        }
+        private EventRatingContainer areaEvents, entityEvents;
+
         private static int[] special_days = { 2, 7, 14, 15, 21, 28, 35, 42, 43, 49, 56, 63, 70, 77, 81, 84, 91, 98, 105, 112, 119, 120, 126, 134, 141, 148, 155, 162, 169, 176, 183, 190, 197, 202, 204, 259, 267, 284, 308, 328, 358, 367 };
         private int our_current_day = -1;
         private static string[] maps = { "Bright Moon Cottage", "Pit & Temple", "Kyoto", "The Natural World", "Happy Town", "Violence District", "Moonlight Tower", "Temple Dojo", "Flesh Tunnels", "Clockwork Machines", "Long Hallway", "Sun Faces Heave", "Black Space", "Monument Park" };
@@ -19,6 +61,9 @@ namespace Lucid_Dream_Explorer
             InitializeComponent();
 
             timer1.Start();
+
+            areaEvents = new EventRatingContainer();
+            entityEvents = new EventRatingContainer();
         }
 
         private IntPtr? ReadDEbaseAdress()
@@ -135,22 +180,7 @@ namespace Lucid_Dream_Explorer
             mio.MemoryWrite(pointer, writeBuf);
         }
 
-        private int DoEventAverage(int sum, int amt, int bonus)
-        {
-            int value = sum / amt + bonus / 3;
-
-            if (value >= 10)
-            {
-                value = -9;
-            }
-            else if (value < -9)
-            {
-                value = 9;
-            }
-            return value;
-        }
-
-        private void DrawDreamChart(int x, int y, bool blink, int chunkX, int chunkY)
+        private void DrawDreamChart(float x, float y, bool blink, EventRatingContainer areas, EventRatingContainer objs)
         {
             Pen ChunkPen = new Pen(Brushes.DodgerBlue, 3.0f);
             int center = pictureBox1.Width / 2; //Width == height here
@@ -161,13 +191,13 @@ namespace Lucid_Dream_Explorer
             Graphics g = Graphics.FromImage(baseImg);
             if (blink)
             {
-                g.FillRectangle(System.Drawing.Brushes.Red, center + x * 16, center - y * 16, 16, 16);
+                g.FillRectangle(Brushes.Red, center + ((int)x) * 16, center - ((int)y) * 16, 16, 16);
             }
             /*else
             {
                 g.FillRectangle(System.Drawing.Brushes.DarkRed, center + x * 16, center - y * 16, 16, 16);
             }*/
-            g.DrawRectangle(ChunkPen, center + chunkX * 16 + 1, center - chunkY * 16 + 1, 14, 14);
+            g.DrawRectangle(ChunkPen, center + areas.last_x * 16 + 1, center - areas.last_y * 16 + 1, 14, 14);
 
             pictureBox1.Image = baseImg;
             ChunkPen.Dispose();
@@ -313,59 +343,52 @@ namespace Lucid_Dream_Explorer
             }
 
             //Events
-            int amtChunks = UpdateReadValue(Offset.events).Value;
-            if (!textBox8.Focused) textBox8.Text = amtChunks.ToString();
-            int lastChunk_x = UpdateReadByte(Offset.last_event_x).Value;
-            if (!textBox9.Focused) textBox9.Text = lastChunk_x.ToString();
-            int lastChunk_y = UpdateReadByte(Offset.last_event_y).Value;
-            if (!textBox12.Focused) textBox12.Text = lastChunk_y.ToString();
-            int sumChunks_x = UpdateReadValue(Offset.total_event_x).Value;
-            if (!textBox10.Focused) textBox10.Text = sumChunks_x.ToString();
-            int sumChunks_y = UpdateReadValue(Offset.total_event_y).Value;
-            if (!textBox11.Focused) textBox11.Text = sumChunks_y.ToString();
-            int avgChunks_x = 0;
-            int avgChunks_y = 0;
+            areaEvents.amount = UpdateReadValue(Offset.events).Value;
+            if (!textBox8.Focused) textBox8.Text = areaEvents.amount.ToString();
+            areaEvents.last_x = UpdateReadByte(Offset.last_event_x).Value;
+            if (!textBox9.Focused) textBox9.Text = areaEvents.last_x.ToString();
+            areaEvents.last_y = UpdateReadByte(Offset.last_event_y).Value;
+            if (!textBox12.Focused) textBox12.Text = areaEvents.last_y.ToString();
+            areaEvents.sum_x = UpdateReadValue(Offset.total_event_x).Value;
+            if (!textBox10.Focused) textBox10.Text = areaEvents.sum_x.ToString();
+            areaEvents.sum_y = UpdateReadValue(Offset.total_event_y).Value;
+            if (!textBox11.Focused) textBox11.Text = areaEvents.sum_y.ToString();
 
-            if (amtChunks > 0)
+            areaEvents.UpdateAverages();
+            textBox13.Text = areaEvents.avg_x.ToString();
+            textBox14.Text = areaEvents.avg_y.ToString();
+
+            entityEvents.amount = UpdateReadValue(Offset.obj_events).Value;
+            if (!textBox21.Focused) textBox21.Text = entityEvents.amount.ToString();
+            entityEvents.last_x = UpdateReadByte(Offset.last_obj_event_x).Value;
+            if (!textBox20.Focused) textBox20.Text = entityEvents.last_x.ToString();
+            entityEvents.last_y = UpdateReadByte(Offset.last_obj_event_y).Value;
+            if (!textBox17.Focused) textBox17.Text = entityEvents.last_y.ToString();
+            entityEvents.sum_x = UpdateReadValue(Offset.total_obj_event_x).Value;
+            if (!textBox19.Focused) textBox19.Text = entityEvents.sum_x.ToString();
+            entityEvents.sum_y = UpdateReadValue(Offset.total_obj_event_y).Value;
+            if (!textBox18.Focused) textBox18.Text = entityEvents.sum_y.ToString();
+
+            float finalRating_x, finalRating_y;
+            if (entityEvents.amount > 0)
             {
-                avgChunks_x = DoEventAverage(sumChunks_x, amtChunks, lastChunk_x);
-                avgChunks_y = DoEventAverage(sumChunks_y, amtChunks, lastChunk_y);
-                textBox13.Text = avgChunks_x.ToString();
-                textBox14.Text = avgChunks_y.ToString();
-            }
-
-            int amtTriggers = UpdateReadValue(Offset.obj_events).Value;
-            if (!textBox21.Focused) textBox21.Text = amtTriggers.ToString();
-            int lastTrigger_x = UpdateReadByte(Offset.last_obj_event_x).Value;
-            if (!textBox20.Focused) textBox20.Text = lastTrigger_x.ToString();
-            int lastTrigger_y = UpdateReadByte(Offset.last_obj_event_y).Value;
-            if (!textBox17.Focused) textBox17.Text = lastTrigger_y.ToString();
-            int sumTriggers_x = UpdateReadValue(Offset.total_obj_event_x).Value;
-            if (!textBox19.Focused) textBox19.Text = sumTriggers_x.ToString();
-            int sumTriggers_y = UpdateReadValue(Offset.total_obj_event_y).Value;
-            if (!textBox18.Focused) textBox18.Text = sumTriggers_y.ToString();
-
-            int finalRating_x, finalRating_y;
-            if (amtTriggers > 0)
-            {
-                int avgTriggers_x = DoEventAverage(sumTriggers_x, amtTriggers, lastTrigger_x);
-                int avgTriggers_y = DoEventAverage(sumTriggers_y, amtTriggers, lastTrigger_y);
-                textBox15.Text = avgTriggers_x.ToString();
-                textBox16.Text = avgTriggers_y.ToString();
-                finalRating_x = ((avgChunks_x + avgTriggers_x) / 2);
-                finalRating_y = ((avgChunks_y + avgTriggers_y) / 2);
+                entityEvents.UpdateAverages();
+                textBox15.Text = entityEvents.avg_x.ToString();
+                finalRating_x = (((float)areaEvents.avg_x + entityEvents.avg_x) / 2);
+                textBox16.Text = entityEvents.avg_y.ToString();
+                finalRating_y = (((float)areaEvents.avg_y + entityEvents.avg_y) / 2);
             }
             else
             {
                 textBox15.Text = "N";
                 textBox16.Text = "A";
-                finalRating_x = avgChunks_x;
-                finalRating_y = avgChunks_y;
+                finalRating_x = areaEvents.avg_x;
+                finalRating_y = areaEvents.avg_y;
             }
-            textBox22.Text = finalRating_x.ToString();
-            textBox23.Text = finalRating_y.ToString();
+            textBox22.Text = ((int)finalRating_x).ToString();
+            textBox23.Text = ((int)finalRating_y).ToString();
 
-            DrawDreamChart(finalRating_x, finalRating_y, blinkMarker, lastChunk_x, lastChunk_y);
+            DrawDreamChart(finalRating_x, finalRating_y, blinkMarker, areaEvents, entityEvents);
             blinkMarker = !blinkMarker;
 
             if (UpdateReadValue(Offset.X).HasValue)
