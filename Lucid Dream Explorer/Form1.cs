@@ -247,6 +247,12 @@ namespace Lucid_Dream_Explorer
                 g.FillEllipse(Brushes.Red, finalX - 4, finalY - 4, 8, 8);
                 g.DrawEllipse(smallOutline, finalX - 4, finalY - 4, 8, 8);
             }
+            else
+            {
+                smallOutline.Brush = Brushes.Black;
+                g.FillEllipse(Brushes.Red, lankedX - 4, lankedY - 4, 8, 8);
+                g.DrawEllipse(smallOutline, lankedX - 4, lankedY - 4, 8, 8);
+            }
 
             pictureBox1.Image = baseImg;
             ChunkPen.Dispose();
