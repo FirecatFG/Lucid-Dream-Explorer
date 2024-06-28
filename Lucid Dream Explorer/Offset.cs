@@ -61,7 +61,7 @@ namespace Lucid_Dream_Explorer
         public static readonly int psxfinMemstart = 0x171A5C;
         public static readonly int psxfinVersion = 0x128D34;
 
-        public static readonly int xebraMemstart = 0x54920;
+        public static readonly int xebraMemstart = 0xAB328;
         public static readonly int xebraVersion = 0x0; //TODO
 
         public static readonly int nocashMemstart = 0xC74C8;
