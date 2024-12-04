@@ -289,6 +289,23 @@ namespace Lucid_Dream_Explorer
             mio.MemoryWrite(pointer, writeBuf);
         }
 
+        private void SetByteDirectly(int number, int offset)
+        {
+            IntPtr? baseAddr = ReadDEbaseAdress();
+            if (baseAddr == null)
+            {
+                return; //Fatal error
+            }
+
+            byte[] writeBuf = new byte[1];
+            writeBuf[0] = (byte)number;
+
+            MemoryIO mio = new MemoryIO(Emulator.emulator);
+            if (!mio.processOK()) return;
+            IntPtr pointer = new IntPtr((int)baseAddr + offset);
+            mio.MemoryWrite(pointer, writeBuf);
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (!busy)
@@ -379,6 +396,18 @@ namespace Lucid_Dream_Explorer
                 previousDayMood_y = UpdateReadByte(Offset.rating_charts + 1 + previousDay * 2).Value;
                 textBox25.Text = previousDayMood_y.ToString();
             }
+
+            //Teleport
+            int teleportsEnabled = UpdateReadByte(Offset.teleports_enabled).Value;
+            if (teleportsEnabled > 0)
+            {
+                checkBox1.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                checkBox1.CheckState = CheckState.Unchecked;
+            }
+
 
             //Flashback score
             if (!textBox30.Focused)
@@ -675,6 +704,18 @@ namespace Lucid_Dream_Explorer
             if (e.KeyCode == Keys.Enter)
             {
                 ButtonSet((TextBox)sender, Offset.dream_timer);
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                SetByteDirectly(1,Offset.teleports_enabled);
+            }
+            else
+            {
+                SetByteDirectly(0, Offset.teleports_enabled);
             }
         }
 

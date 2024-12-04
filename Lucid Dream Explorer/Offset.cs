@@ -25,6 +25,8 @@ namespace Lucid_Dream_Explorer
         public static readonly int day = 0x916B0;
         public static readonly int total_flashback_score = 0x916B4;
 
+        public static readonly int teleports_enabled = 0x8abe4;
+
         public static readonly int dream_timer = 0x91554;
         public static readonly int dream_time_limit = 0x91664;
 
